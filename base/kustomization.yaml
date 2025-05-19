@@ -2,12 +2,13 @@ resources:
   - deployment.yaml # List of resource files to include in this configuration
   - service.yaml    # List of resource files to include in this configuration
 configMapGenerator:
-- name: my-configmap # Name of the ConfigMap
+- name: my-app-config # Name of the ConfigMap
   literals:
-    - key1=value1     # Key-value pairs
-    - key2=value2
+    - app_name=MyKustomizeApp     # Key-value pairs
+    - log_level=debug
 secretGenerator: 
-- name: my-secret    # Name of the secret
+- name: my-app-secret    # Name of the secret
   literals: 
     - username=admin  # Key-value pairs; consider external management for real secrets  
-    - password=s3cr3t
+    - password=czNjcjN0 # base64 encoded password
+  type: Opaque # Type of the secret

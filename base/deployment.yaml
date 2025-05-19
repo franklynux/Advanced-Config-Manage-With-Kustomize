@@ -15,6 +15,12 @@ spec:                   # Specification of the deployment
       containers:      
       - name: nginx    # Name of the container
         image: nginx:1.14.2  # Docker image to use for the container
+        imagePullPolicy: IfNotPresent  # Policy for pulling the image
+        envfrom:  # Environment variables from ConfigMap and Secret
+          - configMapRef:
+              name: my-app-config  # Reference to the ConfigMap
+          - secretRef:
+              name: my-app-secret  # Reference to the Secret
         ports:
         - containerPort: 80  # Port the container will expose
         resources:           # Add resource requests and limits
