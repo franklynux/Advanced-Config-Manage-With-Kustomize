@@ -1,0 +1,9 @@
+resources:
+  - ../../base/
+
+patchesStrategicMerge:
+  - staging_secret.yaml
+
+commonLabels:
+  env: staging
+  namePrefix: staging-
