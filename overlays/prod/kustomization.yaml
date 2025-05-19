@@ -5,4 +5,4 @@ patchesStrategicMerge:
   - prod_secret.yaml
 commonLabels:
   env: production # Label applied to every resource  
-  namePrefix: prod-  # Prefix added to the name of all resources
+  namePrefix: prod  # Prefix added to the name of all resources
