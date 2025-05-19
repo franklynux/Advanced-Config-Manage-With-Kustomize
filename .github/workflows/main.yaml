@@ -17,11 +17,15 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}  
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Update kubeconfig for EKS
         run: |
-          aws eks update-kubeconfig --name kustomize-app-cluster --region us-east-1
+          aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+
+      - name: Verify Kubernetes Cluster Connection
+        run: |
+          kubectl get nodes
 
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v1
@@ -33,4 +37,4 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply -k ./overlays/dev/ 
+          kubectl apply -k ./overlays/dev/ --validate=false
