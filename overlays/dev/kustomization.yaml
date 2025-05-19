@@ -1,9 +1,9 @@
 resources:
   - ../../base # List of resource files to include in this configuration
-  
+
 patchesStrategicMerge:
   - replica_count_dev.yaml # List of patches to apply to the base resources
 
 commonLabels:
-  env: dev # Label applied to every resource  
-  namePrefix: dev-  # Prefix added to the name of all resources  
+  env: dev # Label applied to every resource
+  namePrefix: dev-  # Prefix added to the name of all resources
