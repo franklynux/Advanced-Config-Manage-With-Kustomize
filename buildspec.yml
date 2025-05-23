@@ -2,9 +2,11 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      kubectl: 1.27
     commands:
+      # Install kubectl
+      - curl -LO "https://dl.k8s.io/release/v1.27.0/bin/linux/amd64/kubectl"
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/
       # Download and install Kustomize (Amazon Linux 2 compatible)
       - curl -LO "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz"
       - tar -xzf kustomize_v5.4.2_linux_amd64.tar.gz
