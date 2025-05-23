@@ -14,7 +14,7 @@ phases:
   pre_build:
     commands:
       # Set up kubeconfig for EKS
-      - aws eks update-kubeconfig --region us-east-1 --name kustomize-eks-cluster
+      - aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster
   build:
     commands:
       - cd overlays/dev
