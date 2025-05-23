@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      kubectl: 1.27
+    commands:
+      # Download and install Kustomize (Amazon Linux 2 compatible)
+      - curl -LO "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz"
+      - tar -xzf kustomize_v5.4.2_linux_amd64.tar.gz
+      - mv kustomize /usr/local/bin/kustomize
+  pre_build:
+    commands:
+      # Set up kubeconfig for EKS
+      - aws eks update-kubeconfig --region us-east-1 --name kustomize-eks-cluster
+  build:
+    commands:
+      - cd overlays/dev
+      - kustomize build . > output.yaml
+  post_build:
+    commands:
+      - kubectl apply -f output.yaml
+artifacts:
+  files:
+    - overlays/dev/output.yaml
