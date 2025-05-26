@@ -34,7 +34,7 @@ phases:
       # Enhanced debugging
       - kubectl config view --minify
       - kubectl config current-context
-      - kubectl get ns || { echo "ERROR: Cluster access failed"; exit 1; }
+      - "kubectl get ns || (echo \"ERROR: Cluster access failed\" && exit 1)"
 
   build:
     commands:
@@ -47,7 +47,7 @@ phases:
     commands:
       - cd $CODEBUILD_SRC_DIR/overlays/dev
       - kubectl apply -f output.yaml --dry-run=client # First try dry-run
-      - kubectl apply -f output.yaml || { echo "APPLY FAILED"; exit 1; }
+      - "kubectl apply -f output.yaml || (echo \"APPLY FAILED\" && exit 1)"
 
 artifacts:
   files:
