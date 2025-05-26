@@ -29,11 +29,7 @@ phases:
       - aws sts get-caller-identity
       
       # Set up kubeconfig with more robust error handling
-      - |
-        if ! aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster; then
-          echo "FAILED to update kubeconfig"
-          exit 1
-        fi
+      - "if ! aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster; then echo \"FAILED to update kubeconfig\"; exit 1; fi"
       
       # Enhanced debugging
       - kubectl config view --minify
