@@ -45,7 +45,13 @@ phases:
 
   post_build:
     commands:
-      - kubectl --kubeconfig ~/.kube/config apply -f $CODEBUILD_SRC_DIR/artifacts/output.yaml --dry-run=client # First try dry-run
+      - echo "DEBUG: Checking kubeconfig and AWS credentials"
+      - ls -l ~/.kube || echo "No .kube directory!"
+      - cat ~/.kube/config || echo "No kubeconfig found!"
+      - env | grep AWS
+      - aws sts get-caller-identity
+      - kubectl --kubeconfig ~/.kube/config get ns || { echo "ERROR: Cluster access failed"; exit 1; }
+      - kubectl --kubeconfig ~/.kube/config apply -f $CODEBUILD_SRC_DIR/artifacts/output.yaml --dry-run=client
       - kubectl --kubeconfig ~/.kube/config apply -f $CODEBUILD_SRC_DIR/artifacts/output.yaml || (echo "APPLY FAILED" && exit 1)
 
 artifacts:
