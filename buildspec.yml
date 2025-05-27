@@ -45,9 +45,8 @@ phases:
 
   post_build:
     commands:
-      - cd $CODEBUILD_SRC_DIR/overlays/dev
-      - kubectl apply -f output.yaml --dry-run=client # First try dry-run
-      - "kubectl apply -f output.yaml || (echo \"APPLY FAILED\" && exit 1)"
+      - kubectl --kubeconfig ~/.kube/config apply -f $CODEBUILD_SRC_DIR/artifacts/output.yaml --dry-run=client # First try dry-run
+      - kubectl --kubeconfig ~/.kube/config apply -f $CODEBUILD_SRC_DIR/artifacts/output.yaml || (echo "APPLY FAILED" && exit 1)
 
 artifacts:
   files:
