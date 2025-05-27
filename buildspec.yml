@@ -32,9 +32,9 @@ phases:
       - "if ! aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster; then echo \"FAILED to update kubeconfig\"; exit 1; fi"
       
       # Enhanced debugging
-      - kubectl config view --minify
-      - kubectl config current-context
-      - "kubectl get ns || (echo \"ERROR: Cluster access failed\" && exit 1)"
+      # - kubectl config view --minify
+      # - kubectl config current-context
+      # - "kubectl get ns || (echo \"ERROR: Cluster access failed\" && exit 1)"
 
   build:
     commands:
