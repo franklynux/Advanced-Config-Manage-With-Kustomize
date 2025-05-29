@@ -15,9 +15,7 @@ phases:
     commands:
       - cd overlays/dev
       - kustomize build . > output.yaml
-      - cd ../..
-      - mkdir -p $CODEBUILD_SRC_DIR_OutputArtifact
-      - cp overlays/dev/output.yaml $CODEBUILD_SRC_DIR_OutputArtifact/
+      - ls -la
 
 artifacts:
   files:
