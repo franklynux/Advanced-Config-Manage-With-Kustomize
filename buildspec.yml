@@ -13,11 +13,15 @@ phases:
 
   build:
     commands:
+      - mkdir -p overlays/dev
       - cd overlays/dev
       - kustomize build . > output.yaml
       - ls -la
+      - cd ../..
+      - mkdir -p $(pwd)/overlays/dev
+      - cp overlays/dev/output.yaml $(pwd)/overlays/dev/
 
 artifacts:
   files:
-    - output.yaml
-  base-directory: overlays/dev
+    - overlays/dev/output.yaml
+  discard-paths: no
