@@ -3,38 +3,10 @@ version: 0.2
 phases:
   install:
     commands:
-      # Install kubectl
-      - curl -LO "https://dl.k8s.io/release/v1.27.0/bin/linux/amd64/kubectl"
-      - chmod +x kubectl
-      - mv kubectl /usr/local/bin/
-      
-      # Install aws-iam-authenticator (CRITICAL FOR EKS)
-      - curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator
-      - chmod +x aws-iam-authenticator
-      - mv aws-iam-authenticator /usr/local/bin/
-      
-      # Install Kustomize
       - curl -LO "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz"
       - tar -xzf kustomize_v5.4.2_linux_amd64.tar.gz
       - mv kustomize /usr/local/bin/kustomize
-      
-      # Verify installations
-      - kubectl version --client=true --short=true
-      - aws-iam-authenticator version
       - kustomize version
-
-  pre_build:
-    commands:
-      # Configure AWS CLI (if needed)
-      - aws sts get-caller-identity
-      
-      # Set up kubeconfig with more robust error handling
-      - "if ! aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster; then echo \"FAILED to update kubeconfig\"; exit 1; fi"
-      
-      # Enhanced debugging
-      # - kubectl config view --minify
-      # - kubectl config current-context
-      # - "kubectl get ns || (echo \"ERROR: Cluster access failed\" && exit 1)"
 
   build:
     commands:
@@ -42,17 +14,6 @@ phases:
       - kustomize build . > output.yaml
       - mkdir -p $CODEBUILD_SRC_DIR/artifacts
       - cp output.yaml $CODEBUILD_SRC_DIR/artifacts/
-
-  post_build:
-    commands:
-      - echo "DEBUG: Checking kubeconfig and AWS credentials"
-      - ls -l ~/.kube || echo "No .kube directory!"
-      - cat ~/.kube/config || echo "No kubeconfig found!"
-      - env | grep AWS
-      - aws sts get-caller-identity
-      - "kubectl --kubeconfig ~/.kube/config get ns || (echo \"ERROR: Cluster access failed\" && exit 1)"
-      - kubectl --kubeconfig ~/.kube/config apply -f $CODEBUILD_SRC_DIR/artifacts/output.yaml --dry-run=client
-      - "kubectl --kubeconfig ~/.kube/config apply -f $CODEBUILD_SRC_DIR/artifacts/output.yaml || (echo \"APPLY FAILED\" && exit 1)"
 
 artifacts:
   files:
