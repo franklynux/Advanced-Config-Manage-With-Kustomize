@@ -16,6 +16,7 @@ phases:
       - cd overlays/dev
       - kustomize build . > output.yaml
       - ls -la
+      - cd ../..  # Return to root directory so artifact path matches
 
 artifacts:
   files:
