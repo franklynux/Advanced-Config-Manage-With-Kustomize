@@ -1,5 +1,6 @@
 ---
 version: 0.2
+
 phases:
   install:
     runtime-versions:
@@ -8,34 +9,36 @@ phases:
       - curl -LO "https://dl.k8s.io/release/v1.27.0/bin/linux/amd64/kubectl"
       - chmod +x kubectl
       - mv kubectl /usr/local/bin/
-      - curl -o aws-iam-authenticator
-        https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator
+      - curl -LO "https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator"
       - chmod +x aws-iam-authenticator
       - mv aws-iam-authenticator /usr/local/bin/
-      - curl -LO
-        "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz"
+      - curl -LO "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz"
       - tar -xzf kustomize_v5.4.2_linux_amd64.tar.gz
       - chmod +x kustomize
       - mv kustomize /usr/local/bin/
       - kubectl version --client=true --short=true
       - aws-iam-authenticator version
       - kustomize version
+
   pre_build:
     commands:
       - aws sts get-caller-identity
       - aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster
-      - 'kubectl get ns || { echo "ERROR': Cluster access failed"; exit 1; }
+      - kubectl get ns || echo "ERROR: Cluster access failed" && exit 1
+
   build:
     commands:
       - cd overlays/dev
       - kustomize build . > output.yaml
       - cat output.yaml
       - ls -la
+
   post_build:
     commands:
       - kubectl apply -f output.yaml --dry-run=client
       - kubectl apply -f output.yaml
       - kubectl get pods -n default
+
 artifacts:
   files:
     - overlays/dev/output.yaml
