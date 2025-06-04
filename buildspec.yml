@@ -24,7 +24,7 @@ phases:
     commands:
       - aws sts get-caller-identity
       - aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster
-      - kubectl get ns || echo "ERROR: Cluster access failed" && exit 1
+      - "kubectl get ns || (echo \"ERROR: Cluster access failed\" && exit 1)"
 
   build:
     commands:
