@@ -28,16 +28,20 @@ phases:
 
   build:
     commands:
-      - cd overlays/dev
-      - kustomize build . > output.yaml
-      - cat output.yaml
-      - ls -la
+      - if [ "$STAGE" = "build" ]; then
+          cd overlays/dev;
+          kustomize build . > output.yaml;
+          cat output.yaml;
+          ls -la;
+        fi
 
   post_build:
     commands:
-      - kubectl apply -f output.yaml --dry-run=client
-      - kubectl apply -f output.yaml --validate=false
-      - kubectl get pods -n default
+      - if [ "$STAGE" = "deploy" ]; then
+          kubectl apply -f output.yaml --dry-run=client;
+          kubectl apply -f output.yaml;
+          kubectl get pods -n default;
+        fi
 
 artifacts:
   files:
