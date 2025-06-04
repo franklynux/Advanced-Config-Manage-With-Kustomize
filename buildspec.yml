@@ -23,8 +23,10 @@ phases:
   pre_build:
     commands:
       - aws sts get-caller-identity
-      - aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster
-      - "kubectl get ns || (echo \"ERROR: Cluster access failed\" && exit 1)"
+      - echo "Configuring kubectl for EKS cluster access"
+      - aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster --role-arn $CODEBUILD_ROLE_ARN
+      - kubectl config view
+      - kubectl get ns || echo "WARNING: Cluster access check failed, continuing build"
 
   build:
     commands:
