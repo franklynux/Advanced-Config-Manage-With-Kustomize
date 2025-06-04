@@ -24,9 +24,9 @@ phases:
     commands:
       - aws sts get-caller-identity
       - echo "Configuring kubectl for EKS cluster access"
-      - aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster --role-arn $CODEBUILD_ROLE_ARN
+      - aws eks update-kubeconfig --region us-east-1 --name kustomize-app-cluster
       - kubectl config view
-      - kubectl get ns || echo "WARNING: Cluster access check failed, continuing build"
+      - "kubectl get ns || echo \"WARNING: Cluster access check failed, continuing build\""
 
   build:
     commands:
