@@ -1,9 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
 resources:
-  - ../../base # List of resource files to include in this configuration
+  - ../../base
 
 patchesStrategicMerge:
-  - replica_count_dev.yaml # List of patches to apply to the base resources
+  - replica_count_dev.yaml
 
 commonLabels:
-  env: dev # Label applied to every resource
-  namePrefix: dev  # Prefix added to the name of all resources
+  env: dev
+namePrefix: dev-

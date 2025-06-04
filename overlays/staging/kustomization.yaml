@@ -3,7 +3,8 @@ resources:
 
 patchesStrategicMerge:
   - staging_secret.yaml
+  - replica_count_staging.yaml
 
 commonLabels:
   env: staging
-  namePrefix: staging
+namePrefix: staging-

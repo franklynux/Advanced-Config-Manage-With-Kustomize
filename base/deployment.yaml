@@ -3,20 +3,23 @@ kind: Deployment       # Specifies that this is a Deployment
 metadata:
   name: nginx-deployment  # Name of the deployment
 spec:                   # Specification of the deployment
-  replicas: 2           # Number of replicas (pods running)
+  replicas: 1           # Number of replicas (pods running)
   selector:             # Selector to identify the pods
     matchLabels:        # Correctly nest the app label under matchLabels
       app: nginx
   template:             # Template for the pod creation
     metadata:
       labels:
-        app: nginx     # Label applied to the pod
+        app: nginx
+        # Environment-specific labels will be added by overlays
     spec:
       containers:      
       - name: nginx    # Name of the container
         image: nginx:1.14.2  # Docker image to use for the container
         imagePullPolicy: IfNotPresent  # Policy for pulling the image
-        envfrom:  # Environment variables from ConfigMap and Secret
+        # The 'IfNotPresent' policy is chosen to avoid unnecessary image pulls,
+        # ensuring faster deployments when the image is already present locally.
+        envFrom:  # Environment variables from ConfigMap and Secret
           - configMapRef:
               name: my-app-config  # Reference to the ConfigMap
           - secretRef:

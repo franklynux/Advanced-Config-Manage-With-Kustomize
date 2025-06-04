@@ -1,6 +1,33 @@
-apiVersion: apps/v1 # API version for the deployment object
-kind: Deployment # Specifies that this is a Deployment
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: nginx-deployment # Name of the deployment to patch
+  name: nginx-deployment
 spec:
-  replicas: 3    # Updating the number of replicas for the dev environment
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - configMapRef:
+              name: my-app-config
+          - secretRef:
+              name: my-app-secret
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          
