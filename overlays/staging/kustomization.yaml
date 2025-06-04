@@ -7,4 +7,5 @@ patchesStrategicMerge:
 
 commonLabels:
   env: staging
+  
 namePrefix: staging-

@@ -1,9 +1,12 @@
 resources:
   - ../../base
+  
 patchesStrategicMerge:
   - service_type.yaml # List of patches to apply to the base resources
   - prod_secret.yaml
   - replica_count_prod.yaml
+
 commonLabels:
   env: production # Label applied to every resource  
+
 namePrefix: prod-  # Prefix added to the name of all resources
